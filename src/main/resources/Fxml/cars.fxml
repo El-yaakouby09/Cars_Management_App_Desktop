@@ -4,55 +4,54 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cars_management.Controller.Cars.CarsController">
-    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+<VBox spacing="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cars_management.Controller.Cars.CarsController" stylesheets="@../Style/cars.css">
+   <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
 
-    <Label text="Car Management" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+   <Label text="Car Management" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
 
-    <!-- Form -->
-    <GridPane hgap="10" vgap="10">
-        <columnConstraints>
+   <!-- Form -->
+   <GridPane hgap="10" vgap="10">
+      <columnConstraints>
             <ColumnConstraints prefWidth="80"/>
             <ColumnConstraints prefWidth="200"/>
             <ColumnConstraints prefWidth="80"/>
             <ColumnConstraints prefWidth="200"/>
-        </columnConstraints>
+      </columnConstraints>
 
 
-        <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="tfId" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+      <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+      <TextField fx:id="tfId" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-        <Label text="Matricule:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-        <TextField fx:id="tfMatricule" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+      <Label text="Matricule:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+      <TextField fx:id="tfMatricule" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
 
-        <Label text="Marque:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <TextField fx:id="tfMarque" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+      <Label text="Marque:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+      <TextField fx:id="tfMarque" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-        <Label text="Modele:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-        <TextField fx:id="tfModele" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+      <Label text="Modele:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+      <TextField fx:id="tfModele" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
 
-        <Label text="Annee:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <TextField fx:id="tfAnnee" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+      <Label text="Annee:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+      <TextField fx:id="tfAnnee" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-        <Label text="Prix:" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
-        <TextField fx:id="tfPrix" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
-    </GridPane>
-
-    <HBox spacing="10">
-        <Button text="Add" onAction="#addCar"/>
-        <Button text="Update" onAction="#updateCar"/>
-        <Button text="Delete" onAction="#deleteCar"/>
-        <Button text="Retour" onAction="#handleRetoure" />
-    </HBox>
-
-    <TableView fx:id="tableCars" VBox.vgrow="ALWAYS">
-        <columns>
+      <Label text="Prix:" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+      <TextField fx:id="tfPrix" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+   </GridPane>
+   <HBox spacing="10">
+      <Button text="Add" onAction="#addCar"/>
+      <Button text="Update" onAction="#updateCar"/>
+      <Button text="Delete" onAction="#deleteCar"/>
+      <Button text="Retour" onAction="#handleRetoure" />
+   </HBox>
+   <TableView fx:id="tableCars" VBox.vgrow="ALWAYS">
+      <columns>
             <TableColumn fx:id="colId" text="ID"/>
             <TableColumn fx:id="colMatricule" text="Matricule"/>
             <TableColumn fx:id="colMarque" text="Marque"/>
             <TableColumn fx:id="colModele" text="Modele"/>
             <TableColumn fx:id="colAnnee" text="Annee"/>
             <TableColumn fx:id="colPrix" text="Prix"/>
-        </columns>
-    </TableView>
+      </columns>
+   </TableView>
 </VBox>
+

@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.IOException;
 import com.cars_management.Repository.UserRepository;
+import com.cars_management.Setting.Session;
 import com.cars_management.Controller.Auth.User;
 
 public class LoginController {
@@ -42,6 +43,9 @@ public class LoginController {
                 showError("Nom d'utilisateur ou mot de passe incorrect.");
                 return;
             }
+
+            // set session current user so settings page can identify who is logged in
+            Session.setCurrentUsername(username);
 
             Parent root = FXMLLoader.load(getClass().getResource("/Fxml/dashBord.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

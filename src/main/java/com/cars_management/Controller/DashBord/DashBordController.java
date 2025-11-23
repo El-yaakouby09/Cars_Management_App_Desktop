@@ -43,4 +43,12 @@ public class DashBordController {
         stage.setTitle("Contrats");
         stage.show();
     }
+
+    public void handleSettings(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/Fxml/settings.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Paramètres");
+        stage.show();
+    }
 }

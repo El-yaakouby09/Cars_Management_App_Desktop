@@ -1,5 +1,5 @@
 ﻿/* ================================
-   CARS MANAGEMENT PAGE STYLES
+   CONTRACT MANAGEMENT PAGE STYLES
    ================================ */
 
 .root {
@@ -7,12 +7,9 @@
     -fx-font-family: Segoe UI, sans-serif;
 }
 
-.headTitle {
+.title {
     -fx-background-color: #1F2937;
     -fx-padding: 15;
-}
-
-.textTitleHead {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
@@ -23,6 +20,24 @@
     -fx-padding: 15;
     -fx-background-radius: 8;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+
+.titled-pane {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10;
+    -fx-background-color: #1F2937;
+}
+
+.titled-pane .title {
+    -fx-background-color: #1F2937;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.titled-pane:focused .title {
+    -fx-background-color: #111827;
 }
 
 .table-view {
@@ -36,11 +51,6 @@
 
 .table-view .column-header-background {
     -fx-background-color: #1F2937;
-}
-
-.table-view .column-header,
-.table-view .filler {
-    -fx-size: 35px;
 }
 
 .table-view .column-header .label {
@@ -69,7 +79,7 @@
     -fx-border-color: #E5E7EB;
 }
 
-.text-field {
+.text-field, .combo-box, .date-picker {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #D1D5DB;
     -fx-border-radius: 6;
@@ -78,7 +88,7 @@
     -fx-font-size: 13px;
 }
 
-.text-field:focused {
+.text-field:focused, .combo-box:focused, .date-picker:focused {
     -fx-border-color: #3B82F6;
     -fx-border-width: 2;
 }
@@ -107,12 +117,12 @@
     -fx-background-color: #1D4ED8;
 }
 
-.button.delete {
-    -fx-background-color: #EF4444;
+.button.add {
+    -fx-background-color: #10B981;
 }
 
-.button.delete:hover {
-    -fx-background-color: #DC2626;
+.button.add:hover {
+    -fx-background-color: #059669;
 }
 
 .button.update {
@@ -123,6 +133,14 @@
     -fx-background-color: #D97706;
 }
 
+.button.delete {
+    -fx-background-color: #EF4444;
+}
+
+.button.delete:hover {
+    -fx-background-color: #DC2626;
+}
+
 .button.return {
     -fx-background-color: #6B7280;
 }
@@ -131,10 +149,6 @@
     -fx-background-color: #4B5563;
 }
 
-.form-box {
-    -fx-background-color: #ffffff;
-    -fx-padding: 20px;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-    -fx-border-color: #D1D5DB;
+.vbox, .hbox {
+    -fx-spacing: 10;
 }

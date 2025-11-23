@@ -1,0 +1,63 @@
+/* ================================
+   SETTINGS PAGE STYLES
+   Matches the app's modern theme
+   ================================ */
+
+.root, .settings-root {
+    -fx-background-color: #F3F4F6;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.form-container {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 18;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);
+}
+
+.title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+    -fx-padding: 0 0 8 0;
+}
+
+.label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #374151;
+    -fx-font-weight: 500;
+}
+
+.text-field, .password-field {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+    -fx-font-size: 13px;
+}
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #3B82F6;
+    -fx-border-width: 2;
+}
+
+.button {
+    -fx-background-color: #3B82F6;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-font-weight: bold;
+}
+.button.secondary {
+    -fx-background-color: #6B7280;
+}
+.button:hover {
+    -fx-background-color: #2563EB;
+}
+
+.status-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #065f46; /* green for success messages */
+    -fx-padding: 6 0 0 0;
+}

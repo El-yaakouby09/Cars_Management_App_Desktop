@@ -11,6 +11,7 @@ module com.cars_management {
     opens com.cars_management.Controller.DashBord to javafx.fxml;
     opens com.cars_management.Controller.Reservations to javafx.fxml, javafx.base;
     opens com.cars_management.Controller.Contracts to javafx.fxml, javafx.base;
+    opens com.cars_management.Controller.Auth to javafx.fxml, javafx.base;
 
     exports com.cars_management;
 }

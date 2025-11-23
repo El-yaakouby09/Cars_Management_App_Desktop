@@ -1,11 +1,26 @@
 .planeLogin{
-    -fx-background-color: #433333;
+    -fx-background-color: #1F2937;;
 }
-SS
 
 .buttonLogin {
     -fx-background-color: #2C89F4;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
+    -fx-border-radius: 8;
+}
+.buttonLogin:hover{
+    -fx-background-color: #3f77f0;
+    -fx-opacity: 0.8;
+}
+
+
+
+.hederTitle{
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 10;
+    -fx-background-color: #404852;
+    
 }
 
 

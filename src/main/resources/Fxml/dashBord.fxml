@@ -26,7 +26,7 @@
                     <Button onAction="#handleContracts" styleClass="menu-button" text="Contrats" />
                     <Button onAction="#handlCars" styleClass="menu-button" text="Voitures" />
                     <Button onAction="#handlReservations" styleClass="menu-button" text="Réservations" />
-                    <Button styleClass="menu-button" text="Paramètres" />
+                    <Button onAction="#handleSettings" styleClass="menu-button" text="Paramètres" />
 
                 </VBox>
                  <Button layoutX="18.0" layoutY="393.0" onAction="#handlLogout" prefHeight="40.0" prefWidth="134.0" styleClass="logout-button" text="Logout" />
