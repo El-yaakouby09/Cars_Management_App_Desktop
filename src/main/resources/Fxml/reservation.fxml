@@ -34,6 +34,7 @@
                 </VBox>
 
                 <Button layoutX="33.0" layoutY="344.0" onAction="#addReservation" prefHeight="23.0" prefWidth="55.0" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Ajouter" />
+                <Button text="Retour" onAction="#handleRetoure" />
             </HBox>
 
             <TableView fx:id="tableReservation" prefHeight="385.0" prefWidth="383.0">

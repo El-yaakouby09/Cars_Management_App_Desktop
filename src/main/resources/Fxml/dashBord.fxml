@@ -23,7 +23,7 @@
                     </image>
                 </ImageView>
                 <VBox layoutX="23.0" layoutY="83.0" spacing="20">
-                    <Button styleClass="menu-button" text="Contract" />
+                    <Button onAction="#handleContracts" styleClass="menu-button" text="Contrats" />
                     <Button onAction="#handlCars" styleClass="menu-button" text="Voitures" />
                     <Button onAction="#handlReservations" styleClass="menu-button" text="Réservations" />
                     <Button styleClass="menu-button" text="Paramètres" />

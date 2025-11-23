@@ -35,4 +35,12 @@ public class DashBordController {
         stage.setTitle("Reservations");
         stage.show();
     }
+
+    public void handleContracts(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/Fxml/contract.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Contrats");
+        stage.show();
+    }
 }

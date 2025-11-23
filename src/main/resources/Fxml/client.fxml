@@ -7,4 +7,9 @@
             fx:controller="com.cars_management.Controller.Clients.ClientController"
             prefHeight="400.0" prefWidth="600.0">
 
+    <children>
+        <Button layoutX="14.0" layoutY="14.0" text="Retour" onAction="#handleRetoure" />
+        <!-- Client UI content goes here -->
+    </children>
+
 </AnchorPane>

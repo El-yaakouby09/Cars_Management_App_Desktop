@@ -2,8 +2,16 @@ package com.cars_management.Controller.Reservations;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class ReservationController {
 
@@ -33,6 +41,7 @@ public class ReservationController {
 
     private ObservableList<Reservation> reservations = FXCollections.observableArrayList();
     private ReservationService service = new ReservationService();
+    private com.cars_management.Repository.ReservationRepository reservationRepository = new com.cars_management.Repository.ReservationRepository();
 
     @FXML
     public void initialize() {
@@ -43,6 +52,8 @@ public class ReservationController {
         colTotal.setCellValueFactory(cell -> new javafx.beans.property.SimpleDoubleProperty(cell.getValue().getTotal()).asObject());
 
         tableReservation.setItems(reservations);
+        // load persisted reservations
+        reservations.addAll(reservationRepository.findAll());
     }
 
     @FXML
@@ -61,11 +72,22 @@ public class ReservationController {
 
         double total = service.calculerTotal(days);
 
-        reservations.add(new Reservation(client, car, days, total));
+        Reservation r = new Reservation(client, car, days, total);
+        reservations.add(r);
+        reservationRepository.save(r);
 
         clientField.clear();
         carField.clear();
         daysField.clear();
+    }
+
+    @FXML
+    public void handleRetoure(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/Fxml/dashBord.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("dashBord");
+        stage.show();
     }
 
     private void showAlert(String title, String message) {

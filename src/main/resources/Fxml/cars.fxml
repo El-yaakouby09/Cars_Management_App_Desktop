@@ -42,6 +42,7 @@
         <Button text="Add" onAction="#addCar"/>
         <Button text="Update" onAction="#updateCar"/>
         <Button text="Delete" onAction="#deleteCar"/>
+        <Button text="Retour" onAction="#handleRetoure" />
     </HBox>
 
     <TableView fx:id="tableCars" VBox.vgrow="ALWAYS">

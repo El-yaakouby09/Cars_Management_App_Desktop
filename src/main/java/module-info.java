@@ -3,6 +3,7 @@ module com.cars_management {
     requires javafx.fxml;
     requires javafx.graphics;
     requires java.desktop;
+    requires java.sql;
     requires javafx.base;
 
     opens com.cars_management.Controller to javafx.fxml;
