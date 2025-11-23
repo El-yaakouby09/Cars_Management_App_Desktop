@@ -86,4 +86,44 @@ public class UserRepository {
             System.err.println("Failed to save user: " + e.getMessage());
         }
     }
+
+    /**
+     * Update the password for the given username.
+     * @param username existing username
+     * @param newPassword new password to set
+     * @return true if update affected a row
+     */
+    public boolean updatePassword(String username, String newPassword) {
+        String sql = "UPDATE users SET password = ? WHERE username = ?";
+        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newPassword);
+            ps.setString(2, username);
+            int updated = ps.executeUpdate();
+            return updated > 0;
+        } catch (SQLException e) {
+            System.err.println("Failed to update password: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Change the username for a user.
+     * @param oldUsername existing username
+     * @param newUsername new username to set
+     * @return true if update affected a row
+     */
+    public boolean updateUsername(String oldUsername, String newUsername) {
+        String sql = "UPDATE users SET username = ? WHERE username = ?";
+        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newUsername);
+            ps.setString(2, oldUsername);
+            int updated = ps.executeUpdate();
+            return updated > 0;
+        } catch (SQLException e) {
+            System.err.println("Failed to update username: " + e.getMessage());
+            return false;
+        }
+    }
 }
