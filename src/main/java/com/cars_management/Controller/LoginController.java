@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
+import com.cars_management.Repository.UserRepository;
+import com.cars_management.Controller.Auth.User;
 
 public class LoginController {
     private Stage stage;
@@ -33,11 +35,19 @@ public class LoginController {
             showError("information invalide!!!");
             return;
         }else{
-        Parent root = FXMLLoader.load(getClass().getResource("/Fxml/dashBord.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setTitle("dashBord");
-        stage.show(); }
+            // validate against users table
+            UserRepository userRepo = new UserRepository();
+            User u = userRepo.findByUsername(username);
+            if (u == null || !password.equals(u.getPassword())) {
+                showError("Nom d'utilisateur ou mot de passe incorrect.");
+                return;
+            }
+
+            Parent root = FXMLLoader.load(getClass().getResource("/Fxml/dashBord.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("dashBord");
+            stage.show(); }
     }
 
     private void showError(String s) {
