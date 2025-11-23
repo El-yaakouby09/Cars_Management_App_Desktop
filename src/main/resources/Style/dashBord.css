@@ -1,0 +1,70 @@
+/* ================================
+   PANEL GAUCHE (MENU)
+   ================================ */
+.paneDahBord {
+    -fx-background-color: #1F2937; /* gris foncé moderne */
+    -fx-padding: 20;
+    -fx-border-width: 0 2 0 0;
+    -fx-border-color: #111827;
+}
+
+/* ================================
+   BOUTONS DU MENU
+   ================================ */
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #E5E7EB;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 20;
+    -fx-background-radius: 8;
+}
+
+.menu-button:hover {
+    -fx-background-color: #374151;
+}
+
+/* ================================
+   TITRES
+   ================================ */
+.title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-fill: #111827;
+}
+
+/* ================================
+   CARDS STATISTIQUES
+   ================================ */
+.stat-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);
+}
+
+.stat-number {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-fill: #111827;
+}
+
+.stat-label {
+    -fx-font-size: 14px;
+    -fx-fill: #6B7280;
+}
+/* ================================
+   BOUTON LOGOUT
+   ================================ */
+.logout-button {
+    -fx-background-color: #DC2626;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+    -fx-background-radius: 8;
+}
+
+.logout-button:hover {
+    -fx-background-color: #B91C1C;
+}

@@ -1,0 +1,17 @@
+.planeLogin{
+    -fx-background-color: #433333;
+}
+SS
+
+.buttonLogin {
+    -fx-background-color: #2C89F4;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
+}
+
+
+
+
+
+
+
+

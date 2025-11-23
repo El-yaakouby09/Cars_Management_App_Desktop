@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="466.0" prefWidth="740.0" stylesheets="@../Style/dashBord.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cars_management.Controller.DashBord.DashBordController">
+
+    <children>
+
+        <!-- MENU À GAUCHE -->
+        <Pane layoutY="-1.0" prefHeight="466.0" prefWidth="185.0" styleClass="paneDahBord" stylesheets="@../Style/dashBord.css">
+            <children>
+                <ImageView fitHeight="68.0" fitWidth="66.0" layoutX="40.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/logo.jpeg" />
+                    </image>
+                </ImageView>
+                <VBox layoutX="23.0" layoutY="83.0" spacing="20">
+                    <Button styleClass="menu-button" text="Contract" />
+                    <Button onAction="#handlCars" styleClass="menu-button" text="Voitures" />
+                    <Button onAction="#handlReservations" styleClass="menu-button" text="Réservations" />
+                    <Button styleClass="menu-button" text="Paramètres" />
+
+                </VBox>
+                 <Button layoutX="18.0" layoutY="393.0" onAction="#handlLogout" prefHeight="40.0" prefWidth="134.0" styleClass="logout-button" text="Logout" />
+            </children>
+
+        </Pane>
+
+        <!-- TITRE -->
+        <Text layoutX="240.0" layoutY="50.0" styleClass="titleDashBord" text="Dashboard Cars">
+         <font>
+            <Font size="19.0" />
+         </font></Text>
+
+        <!-- STATISTIQUES -->
+        <HBox layoutX="210" layoutY="90" spacing="20">
+
+            <!-- Voitures -->
+            <VBox alignment="CENTER" prefHeight="120.0" prefWidth="189.0" spacing="5" styleClass="stat-card" stylesheets="@../Style/dashBord.css">
+                <Text styleClass="stat-number" text="58" />
+                <Text styleClass="stat-label" text="Voitures" />
+            </VBox>
+
+        </HBox>
+
+         <!-- Clients -->
+         <VBox alignment="CENTER" layoutX="457.0" layoutY="90.0" prefHeight="120" prefWidth="219.0" spacing="5" styleClass="stat-card" stylesheets="@../Style/dashBord.css">
+             <Text styleClass="stat-number" text="125" />
+             <Text styleClass="stat-label" text="Clients" />
+         </VBox>
+
+         <!-- Chiffre d'affaires -->
+         <VBox alignment="CENTER" layoutX="221.0" layoutY="246.0" prefHeight="106.0" prefWidth="287.0" spacing="5" styleClass="stat-card" stylesheets="@../Style/dashBord.css">
+             <Text styleClass="stat-number" text="320.000 MAD" />
+             <Text styleClass="stat-label" text="Revenus" />
+         </VBox>
+
+    </children>
+</AnchorPane>

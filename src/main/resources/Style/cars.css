@@ -1,0 +1,114 @@
+/* === General Layout === */
+.root {
+    -fx-background-color: #f5f5f5;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+.headTitle{
+    -fx-background-color: #111827;
+}
+.textTitleHead{
+    -fx-font-weight: 33;
+}
+/* === TableView Style === */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #d0d0d0;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to bottom, #dedede, #c8c8c8);
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-size: 35px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.table-row-cell {
+    -fx-cell-size: 38px;
+    -fx-font-size: 14px;
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: white;
+}
+
+.table-row-cell:filled:hover {
+    -fx-background-color: #e8f1ff;
+}
+
+/* === TextFields === */
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #bfbfbf;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 6px;
+    -fx-font-size: 13px;
+}
+
+.text-field:focused {
+    -fx-border-color: #4a90e2;
+    -fx-border-width: 2px;
+}
+
+/* === Labels === */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #444;
+}
+
+/* === Buttons === */
+.button {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 18px;
+    -fx-background-radius: 6px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #3a78c8;
+}
+
+.button:pressed {
+    -fx-background-color: #2f64a8;
+}
+
+/* === Special Buttons (Delete / Return) === */
+.button.delete {
+    -fx-background-color: #e24a4a;
+}
+
+.button.delete:hover {
+    -fx-background-color: #c03939;
+}
+
+.button.return {
+    -fx-background-color: #6e6e6e;
+}
+
+.button.return:hover {
+    -fx-background-color: #555;
+}
+
+/* === Pane & Forms === */
+.form-box {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-border-color: #d4d4d4;
+}
