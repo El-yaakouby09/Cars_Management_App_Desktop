@@ -80,7 +80,10 @@
     -fx-text-fill: #374151;
     -fx-font-weight: 500;
 }
-
+.hboxButton{
+    -fx-spacing: 10;
+    -fx-padding: 10 0 0 0;
+}
 .button {
     -fx-background-color: #3B82F6;
     -fx-text-fill: white;
@@ -92,6 +95,10 @@
 }
 
 .button:hover {
+    -fx-background-color: #2563EB;
+}
+
+.buttonRetour:hover {
     -fx-background-color: #2563EB;
 }
 

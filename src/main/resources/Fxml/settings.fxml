@@ -1,36 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cars_management.Controller.Auth.SettingsController" spacing="12" stylesheets="@../Style/settings.css" styleClass="settings-root">
+<VBox prefHeight="375.0" prefWidth="481.0" spacing="12" styleClass="settings-root" stylesheets="@../Style/settings.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cars_management.Controller.Auth.SettingsController">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20" />
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
-    <Label text="Paramètres du compte" styleClass="title" />
+     <TextField fx:id="tfCurrentUsername" editable="false" prefHeight="51.0" prefWidth="441.0" style="-fx-background-color: #FFFFF;" styleClass="hederTitle" stylesheets="@../Style/settings.css" text="Paramètres du compte" />
 
-    <GridPane hgap="10" vgap="10" styleClass="form-container">
+    <GridPane hgap="10" styleClass="form-container" vgap="10">
         <columnConstraints>
             <ColumnConstraints minWidth="120" />
             <ColumnConstraints minWidth="240" />
         </columnConstraints>
 
-        <Label text="Utilisateur actuel:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="label" />
-        <TextField fx:id="tfCurrentUsername" editable="false" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="text-field" />
+        <Label styleClass="label" text="Utilisateur actuel:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
 
-        <Label text="Nouveau nom d'utilisateur:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="label" />
-        <TextField fx:id="tfNewUsername" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="text-field" />
+        <Label styleClass="label" text="Nouveau nom d'utilisateur:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="tfNewUsername" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-        <Label text="Nouveau mot de passe:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="label" />
-        <PasswordField fx:id="pfNewPassword" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="password-field" />
+        <Label styleClass="label" text="Nouveau mot de passe:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <PasswordField fx:id="pfNewPassword" styleClass="password-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-        <Label text="Confirmer mot de passe:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="label" />
-        <PasswordField fx:id="pfConfirmPassword" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="password-field" />
+        <Label styleClass="label" text="Confirmer mot de passe:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <PasswordField fx:id="pfConfirmPassword" styleClass="password-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
     </GridPane>
 
-    <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button text="Annuler" onAction="#handleCancel" styleClass="button secondary" />
-        <Button text="Enregistrer" onAction="#handleSave" styleClass="button" />
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button onAction="#handleCancel" styleClass="button secondary" text="Annuler" />
+        <Button onAction="#handleSave" styleClass="button" text="Enregistrer" />
     </HBox>
 
     <Label fx:id="lblStatus" styleClass="status-label" />

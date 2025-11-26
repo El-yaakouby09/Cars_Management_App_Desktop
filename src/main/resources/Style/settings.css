@@ -27,7 +27,11 @@
     -fx-text-fill: #374151;
     -fx-font-weight: 500;
 }
-
+.hederTitle{
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 20 0;
+}
 .text-field, .password-field {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #D1D5DB;

@@ -7,11 +7,11 @@ import java.util.Objects;
 public class Car {
 
     private Integer id;
-    private String matricule;        // رقم اللوحة
-    private String marqueModel;      // marque + model
+    private String matricule;       
+    private String marqueModel;      
     private Integer annee;
-    private String status;           // "Available", "maintenance", "not available"
-    private BigDecimal prixDay;      // prix par jour
+    private String status;           
+    private BigDecimal prixDay;     
     private LocalDate dateMaintenance;
 
     public Car() {}
@@ -30,7 +30,6 @@ public class Car {
         this(null, matricule, marqueModel, status, prixDay, dateMaintenance);
     }
 
-    // Compatibility constructor used by older controllers: id, marque, modele, annee, prix
     public Car(int id, String marque, String modele, int annee, double prix) {
         this.id = id;
         this.matricule = null;
