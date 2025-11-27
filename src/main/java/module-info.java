@@ -14,4 +14,5 @@ module com.cars_management {
     opens com.cars_management.Controller.Auth to javafx.fxml, javafx.base;
 
     exports com.cars_management;
+    opens com.cars_management.Repository to javafx.base, javafx.fxml;
 }
