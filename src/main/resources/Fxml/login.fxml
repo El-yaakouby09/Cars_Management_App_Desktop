@@ -12,38 +12,63 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cars_management.Controller.LoginController">
-   <children>
-       <Pane prefHeight="400.0" prefWidth="174.0" styleClass="planeLogin" stylesheets="@../Style/login.css">
-           <children>
-               <ImageView fitHeight="91.0" fitWidth="108.0" layoutX="31.0" layoutY="122.0" pickOnBounds="true" preserveRatio="true">
-                   <image>
-                       <Image url="@../images/logo.jpeg" />
-                   </image>
-               </ImageView>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.cars_management.Controller.LoginController">
+    <children>
+        <!-- Left Colored Panel -->
+        <Pane prefHeight="400.0" prefWidth="180.0" styleClass="planeLogin" stylesheets="@../Style/login.css">
+            <children>
+                <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="32.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/logo.jpeg" />
+                    </image>
+                </ImageView>
 
-               <Label layoutX="17.0" layoutY="233.0" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="Hamzax2Cars" textFill="WHITE">
-               <font>
-                  <Font name="Arial Nova Bold Italic" size="56.0" />
-               </font></Label>
-           </children>
-       </Pane>
-      <VBox layoutX="170.0" layoutY="-2.0" prefHeight="400.0" prefWidth="430.0">
-         <effect>
-            <DropShadow />
-         </effect></VBox>
-      <Button layoutX="371.0" layoutY="308.0" mnemonicParsing="false" onAction="#switchPage2" prefHeight="31.0" prefWidth="116.0" styleClass="buttonLogin" stylesheets="@../Style/login.css" text="Login" textFill="WHITE">
-         <effect>
-            <DropShadow />
-         </effect></Button>
-      <Label layoutX="227.0" layoutY="121.0" prefHeight="77.0" prefWidth="345.0" styleClass="labellogin" stylesheets="@../Style/login.css" text="UserName" />
-       <TextField fx:id="usernameField" layoutX="310.0" layoutY="147.0" prefHeight="25.0" prefWidth="237.0" promptText="Entre User name" />
-      <Label layoutX="227.0" layoutY="198.0" prefHeight="77.0" prefWidth="345.0" styleClass="labellogin" stylesheets="@../Style/login.css" text="Password" />
-       <PasswordField fx:id="passwordField" layoutX="315.0" layoutY="224.0" prefHeight="25.0" prefWidth="237.0" promptText="Enter password" />
-      <TextField layoutY="-9.0" prefHeight="81.0" prefWidth="600.0" style="-fx-padding: 10;" styleClass="hederTitle" stylesheets="@../Style/login.css" text="               Bonjour! Dans Agence HamzaX2Cars">
-         <font>
-            <Font name="Arial Nova Light" size="37.0" />
-         </font>
-      </TextField>
-   </children>
+                <Label layoutX="10.0" layoutY="240.0" style="-fx-text-fill: white; -fx-font-weight: bold;" text="Hamzax2Cars">
+                    <font>
+                        <Font name="Arial Bold" size="28.0" />
+                    </font>
+                </Label>
+            </children>
+        </Pane>
+
+        <!-- Soft Shadow Background -->
+        <VBox layoutX="180.0" layoutY="0.0" prefHeight="400.0" prefWidth="420.0" style="-fx-background-color: #f9f9f9; -fx-padding: 20;">
+            <effect>
+                <DropShadow />
+            </effect>
+        </VBox>
+
+        <!-- Header Title -->
+        <Label layoutX="200.0" layoutY="20.0" prefWidth="360.0" styleClass="hederTitle" stylesheets="@../Style/login.css" text="Bienvenue dans HamzaX2Cars">
+            <font>
+                <Font name="Arial Nova" size="26.0" />
+            </font>
+        </Label>
+
+        <!-- Username Label -->
+        <Label layoutX="205.0" layoutY="120.0" styleClass="labellogin" stylesheets="@../Style/login.css" text="Utilisateur" />
+
+        <!-- Username Field -->
+        <TextField fx:id="usernameField" layoutX="295.0" layoutY="145.0" prefHeight="30.0" prefWidth="250.0"
+                   style="-fx-background-radius: 10; -fx-padding: 6;" promptText="Entrer votre nom d’utilisateur" />
+
+        <!-- Password Label -->
+        <Label layoutX="205.0" layoutY="190.0" styleClass="labellogin" stylesheets="@../Style/login.css" text="Mot de passe" />
+
+        <!-- Password Field -->
+        <PasswordField fx:id="passwordField" layoutX="295.0" layoutY="215.0" prefHeight="30.0" prefWidth="250.0"
+                       style="-fx-background-radius: 10; -fx-padding: 6;" promptText="Entrer votre mot de passe" />
+
+        <!-- Login Button -->
+        <Button layoutX="350.0" layoutY="290.0" mnemonicParsing="false" onAction="#switchPage2"
+                prefHeight="35.0" prefWidth="150.0" styleClass="buttonLogin" stylesheets="@../Style/login.css"
+                text="Connexion" textFill="WHITE">
+            <effect>
+                <DropShadow />
+            </effect>
+        </Button>
+
+    </children>
 </AnchorPane>

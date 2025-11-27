@@ -1,32 +1,79 @@
-.planeLogin{
-    -fx-background-color: #1F2937;;
+/* ----- DARK THEME + GLASSMORPHISM + ANIMATIONS ----- */
+
+/* ----- Global Reset for smooth animations ----- */
+* {
+    -fx-transition: all 0.3s ease;
 }
 
-.buttonLogin {
-    -fx-background-color: #2C89F4;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
-    -fx-border-radius: 8;
-}
-.buttonLogin:hover{
-    -fx-background-color: #3f77f0;
-    -fx-opacity: 0.8;
+/* ----- Left Sidebar (Dark + Neon Glow) ----- */
+.planeLogin {
+    -fx-background-color: linear-gradient(to bottom, #0f0f0f, #1a1a1a);
+    -fx-background-radius: 0 20 20 0;
+    -fx-border-radius: 0 20 20 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 255, 255, 0.25), 20, 0, 0, 0);
 }
 
-
-
-.hederTitle{
-    -fx-font-size: 24px;
+/* ----- Header Title ----- */
+.hederTitle {
+    -fx-text-fill: #00eaff;
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
-    -fx-text-fill: #FFFFFF;
-    -fx-padding: 10;
-    -fx-background-color: #404852;
-    
+    -fx-effect: dropshadow(gaussian, rgba(0,255,255,0.4), 10, 0, 0, 0);
 }
 
+/* ----- Labels ----- */
+.labellogin {
+    -fx-font-size: 16px;
+    -fx-text-fill: #d0d0d0;
+    -fx-font-weight: bold;
+}
 
+/* ----- TextFields & PasswordFields (Glassmorphism) ----- */
+.text-field, .password-field {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: rgba(0,234,255,0.3);
+    -fx-padding: 6;
+    -fx-text-fill: #e0e0e0;
+    -fx-prompt-text-fill: #888;
+    -fx-font-size: 14px;
+    -fx-backdrop-filter: blur(10px);
+}
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #00eaff;
+    -fx-effect: dropshadow(gaussian, rgba(0,234,255,0.4), 10, 0, 0, 0);
+}
 
+/* ----- Login Button (Neon + Hover Glow + Animation) ----- */
+.buttonLogin {
+    -fx-background-color: linear-gradient(to right, #005c99, #0099cc);
+    -fx-background-radius: 20;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,153,204,0.5), 10, 0, 0, 0);
+}
+.buttonLogin:hover {
+    -fx-background-color: linear-gradient(to right, #0099cc, #00cfff);
+    -fx-effect: dropshadow(gaussian, rgba(0,255,255,0.7), 15, 0, 0, 0);
+    -fx-translate-y: -3; /* small floating animation */
+}
+.buttonLogin:pressed {
+    -fx-translate-y: 0;
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
 
+/* ----- Smooth Fade-in animation for entire login page ----- */
+.root {
+    -fx-opacity: 0;
+    -fx-animation: fadein 1.2s forwards;
+}
 
-
-
-
+@keyframes fadein {
+    from { -fx-opacity: 0; }
+    to   { -fx-opacity: 1; }
+}
