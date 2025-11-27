@@ -2,11 +2,11 @@ package com.cars_management.Repository;
 
 import com.cars_management.Controller.Contracts.Contract;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContractRepository {
+public class ContractRepository implements IContractRepository {
+
     private String dbUrl;
     private String dbUser;
     private String dbPassword;
@@ -29,113 +29,113 @@ public class ContractRepository {
     }
 
     private void createTableIfNotExists() {
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS contracts (" +
-                "id SERIAL PRIMARY KEY, " +
-                "client_name VARCHAR(255) NOT NULL, " +
-                "client_cni VARCHAR(255) NOT NULL, " +
-                "client_phone VARCHAR(20) NOT NULL, " +
-                "client_address VARCHAR(255) NOT NULL, " +
-                "driver_license_date DATE NOT NULL, " +
-                "car_brand VARCHAR(100) NOT NULL, " +
-                "car_model VARCHAR(100) NOT NULL, " +
-                "car_plate VARCHAR(20) NOT NULL, " +
-                "rental_start_date DATE NOT NULL, " +
-                "rental_end_date DATE NOT NULL, " +
-                "rental_days INTEGER NOT NULL, " +
-                "price_per_day NUMERIC(10, 2) NOT NULL, " +
-                "total_price NUMERIC(10, 2) NOT NULL" +
-                ")";
+        String sql =
+                "CREATE TABLE IF NOT EXISTS contracts (" +
+                        "id SERIAL PRIMARY KEY, " +
+                        "client_name VARCHAR(255), " +
+                        "client_cni VARCHAR(255), " +
+                        "client_phone VARCHAR(20), " +
+                        "client_address VARCHAR(255), " +
+                        "driver_license_date DATE, " +
+                        "car_brand VARCHAR(100), " +
+                        "car_model VARCHAR(100), " +
+                        "car_plate VARCHAR(20), " +
+                        "rental_start_date DATE, " +
+                        "rental_end_date DATE, " +
+                        "rental_days INTEGER, " +
+                        "price_per_day DOUBLE PRECISION, " +
+                        "total_price DOUBLE PRECISION" +
+                        ")";
 
-        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-             Statement stmt = conn.createStatement()) {
-            stmt.execute(createTableSQL);
-            System.out.println("Contracts table created or already exists.");
+        try (Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+             Statement st = c.createStatement()) {
+
+            st.execute(sql);
+
         } catch (SQLException e) {
-            System.err.println("Failed to create contracts table: " + e.getMessage());
+            System.err.println("Table creation failed: " + e.getMessage());
         }
     }
 
+    @Override
     public void save(Contract contract) {
-        String insertSQL = "INSERT INTO contracts " +
-                "(client_name, client_cni, client_phone, client_address, driver_license_date, " +
-                "car_brand, car_model, car_plate, rental_start_date, rental_end_date, rental_days, " +
-                "price_per_day, total_price) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql =
+                "INSERT INTO contracts (client_name, client_cni, client_phone, client_address, driver_license_date," +
+                        "car_brand, car_model, car_plate, rental_start_date, rental_end_date, rental_days, price_per_day, total_price) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-             PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
-            pstmt.setString(1, contract.getClientName());
-            pstmt.setString(2, contract.getClientCNI());
-            pstmt.setString(3, contract.getClientPhone());
-            pstmt.setString(4, contract.getClientAddress());
-            pstmt.setDate(5, Date.valueOf(contract.getDriverLicenseDate()));
-            pstmt.setString(6, contract.getCarBrand());
-            pstmt.setString(7, contract.getCarModel());
-            pstmt.setString(8, contract.getCarPlate());
-            pstmt.setDate(9, Date.valueOf(contract.getRentalStartDate()));
-            pstmt.setDate(10, Date.valueOf(contract.getRentalEndDate()));
-            pstmt.setInt(11, contract.getRentalDays());
-            pstmt.setDouble(12, contract.getPricePerDay());
-            pstmt.setDouble(13, contract.getTotalPrice());
+        try (Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
-            pstmt.executeUpdate();
-            System.out.println("Contract saved successfully.");
+            fillStatement(ps, contract, false);
+            ps.executeUpdate();
+
         } catch (SQLException e) {
-            System.err.println("Failed to save contract: " + e.getMessage());
+            System.err.println("Save failed: " + e.getMessage());
         }
     }
 
+    @Override
     public void update(Contract contract) {
-        String updateSQL = "UPDATE contracts SET " +
-                "client_name=?, client_cni=?, client_phone=?, client_address=?, driver_license_date=?, " +
-                "car_brand=?, car_model=?, car_plate=?, rental_start_date=?, rental_end_date=?, " +
-                "rental_days=?, price_per_day=?, total_price=? " +
-                "WHERE id=?";
+        String sql =
+                "UPDATE contracts SET client_name=?, client_cni=?, client_phone=?, client_address=?, driver_license_date=?," +
+                        "car_brand=?, car_model=?, car_plate=?, rental_start_date=?, rental_end_date=?, rental_days=?, price_per_day=?, total_price=? " +
+                        "WHERE id=?";
 
-        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-             PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
-            pstmt.setString(1, contract.getClientName());
-            pstmt.setString(2, contract.getClientCNI());
-            pstmt.setString(3, contract.getClientPhone());
-            pstmt.setString(4, contract.getClientAddress());
-            pstmt.setDate(5, Date.valueOf(contract.getDriverLicenseDate()));
-            pstmt.setString(6, contract.getCarBrand());
-            pstmt.setString(7, contract.getCarModel());
-            pstmt.setString(8, contract.getCarPlate());
-            pstmt.setDate(9, Date.valueOf(contract.getRentalStartDate()));
-            pstmt.setDate(10, Date.valueOf(contract.getRentalEndDate()));
-            pstmt.setInt(11, contract.getRentalDays());
-            pstmt.setDouble(12, contract.getPricePerDay());
-            pstmt.setDouble(13, contract.getTotalPrice());
-            pstmt.setInt(14, contract.getId());
+        try (Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
-            pstmt.executeUpdate();
-            System.out.println("Contract updated successfully.");
+            fillStatement(ps, contract, true);
+            ps.executeUpdate();
+
         } catch (SQLException e) {
-            System.err.println("Failed to update contract: " + e.getMessage());
+            System.err.println("Update failed: " + e.getMessage());
         }
     }
 
+    private void fillStatement(PreparedStatement ps, Contract contract, boolean includeId) throws SQLException {
+        ps.setString(1, contract.getClientName());
+        ps.setString(2, contract.getClientCNI());
+        ps.setString(3, contract.getClientPhone());
+        ps.setString(4, contract.getClientAddress());
+        ps.setDate(5, Date.valueOf(contract.getDriverLicenseDate()));
+        ps.setString(6, contract.getCarBrand());
+        ps.setString(7, contract.getCarModel());
+        ps.setString(8, contract.getCarPlate());
+        ps.setDate(9, Date.valueOf(contract.getRentalStartDate()));
+        ps.setDate(10, Date.valueOf(contract.getRentalEndDate()));
+        ps.setInt(11, contract.getRentalDays());
+        ps.setDouble(12, contract.getPricePerDay());
+        ps.setDouble(13, contract.getTotalPrice());
+
+        if (includeId) {
+            ps.setInt(14, contract.getId());
+        }
+    }
+
+    @Override
     public void delete(Integer id) {
-        String deleteSQL = "DELETE FROM contracts WHERE id=?";
+        String sql = "DELETE FROM contracts WHERE id=?";
 
-        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-             PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
-            pstmt.setInt(1, id);
-            pstmt.executeUpdate();
-            System.out.println("Contract deleted successfully.");
+        try (Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
         } catch (SQLException e) {
-            System.err.println("Failed to delete contract: " + e.getMessage());
+            System.err.println("Delete failed: " + e.getMessage());
         }
     }
 
+    @Override
     public List<Contract> findAll() {
-        List<Contract> contracts = new ArrayList<>();
-        String selectSQL = "SELECT * FROM contracts ORDER BY id DESC";
+        List<Contract> list = new ArrayList<>();
+        String sql = "SELECT * FROM contracts ORDER BY id DESC";
 
-        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(selectSQL)) {
+        try (Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+             Statement st = c.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
                 Contract contract = new Contract(
@@ -154,12 +154,13 @@ public class ContractRepository {
                         rs.getDouble("price_per_day"),
                         rs.getDouble("total_price")
                 );
-                contracts.add(contract);
+                list.add(contract);
             }
+
         } catch (SQLException e) {
             System.err.println("FindAll failed: " + e.getMessage());
         }
 
-        return contracts;
+        return list;
     }
 }
