@@ -1,5 +1,8 @@
 package com.cars_management.Controller.Cars;
 
+import com.cars_management.Repository.ICarRepository;
+import com.cars_management.Repository.CarRepository;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,9 +19,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class CarsController {
+
     private Stage stage;
     private Scene scene;
     private Parent root;
+
     @FXML
     private TableView<Car> tableCars;
 
@@ -40,7 +45,8 @@ public class CarsController {
 
     private final ObservableList<Car> carList = FXCollections.observableArrayList();
 
-    private com.cars_management.Repository.CarRepository carRepository;
+    // ********** NOUVEAU : utilisation de l’interface **********
+    private ICarRepository carRepository;
 
     @FXML
     public void initialize() {
@@ -53,11 +59,12 @@ public class CarsController {
 
         tableCars.setItems(carList);
 
-        // S'assurer que le TableView prend tout l'espace disponible
         VBox.setVgrow(tableCars, javafx.scene.layout.Priority.ALWAYS);
 
-        // initialize repository and load existing cars from DB
-        carRepository = new com.cars_management.Repository.CarRepository();
+        // ********** NOUVEAU : affectation avec l’interface **********
+        carRepository = new CarRepository();
+
+        // charger les données
         carList.addAll(carRepository.findAll());
     }
 
@@ -70,14 +77,15 @@ public class CarsController {
             String modele = tfModele.getText();
             int annee = Integer.parseInt(tfAnnee.getText());
             double prix = Double.parseDouble(tfPrix.getText());
+
             Car car = new Car(id, marque, modele, annee, prix);
             car.setMatricule(matricule);
-            carList.add(car);
 
-            // persist
+            carList.add(car);
             carRepository.save(car);
 
             clearFields();
+
         } catch (NumberFormatException e) {
             showAlert("Erreur", "Vérifiez les valeurs saisies.");
         }
@@ -86,6 +94,7 @@ public class CarsController {
     @FXML
     private void deleteCar() {
         Car selected = tableCars.getSelectionModel().getSelectedItem();
+
         if (selected != null) {
             carList.remove(selected);
             carRepository.delete(selected.getId());
@@ -97,6 +106,7 @@ public class CarsController {
     @FXML
     private void updateCar() {
         Car selected = tableCars.getSelectionModel().getSelectedItem();
+
         if (selected != null) {
             try {
                 selected.setId(Integer.parseInt(tfId.getText()));
@@ -105,9 +115,12 @@ public class CarsController {
                 selected.setModele(tfModele.getText());
                 selected.setAnnee(Integer.parseInt(tfAnnee.getText()));
                 selected.setPrix(Double.parseDouble(tfPrix.getText()));
+
                 tableCars.refresh();
                 clearFields();
+
                 carRepository.update(selected);
+
             } catch (NumberFormatException e) {
                 showAlert("Erreur", "Vérifiez les valeurs saisies.");
             }
@@ -134,6 +147,7 @@ public class CarsController {
         alert.showAndWait();
     }
 
+    @FXML
     public void handleRetoure(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/Fxml/dashBord.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
