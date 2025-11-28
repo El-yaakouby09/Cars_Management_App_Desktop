@@ -51,24 +51,18 @@
                 <!-- Vehicle Information Section -->
                 <TitledPane text="Informations du Véhicule" animated="false">
                     <VBox spacing="10" style="-fx-padding: 10;">
-                        <HBox spacing="20">
-                            <VBox prefWidth="300">
-                                <Label text="Marque"/>
-                                <TextField fx:id="tfCarBrand" promptText="Marque du véhicule"/>
-                            </VBox>
-                            <VBox prefWidth="300">
-                                <Label text="Modèle"/>
-                                <TextField fx:id="tfCarModel" promptText="Modèle du véhicule"/>
-                            </VBox>
-                        </HBox>
-                        <HBox spacing="20">
-                            <VBox prefWidth="300">
-                                <Label text="Plaque d'Immatriculation"/>
-                                <TextField fx:id="tfCarPlate" promptText="Numéro de plaque"/>
-                            </VBox>
-                        </HBox>
+
+                        <!-- ComboBox : sélectionner une voiture -->
+                        <VBox prefWidth="300">
+                            <Label text="Sélectionner un véhicule"/>
+                            <ComboBox fx:id="cbCars" onAction="#onCarSelected" prefWidth="300"/>
+                        </VBox>
+
                     </VBox>
                 </TitledPane>
+
+
+
 
                 <!-- Rental Information Section -->
                 <TitledPane text="Informations de Location" animated="false">
@@ -128,7 +122,7 @@
                             <columns>
                                 <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
                                 <TableColumn fx:id="colClientName" text="Client" prefWidth="120"/>
-                                <TableColumn fx:id="colCarPlate" text="Plaque" prefWidth="100"/>
+                                <TableColumn fx:id="colCarInfo" text="Voiture"/>
                                 <TableColumn fx:id="colStartDate" text="Début" prefWidth="100"/>
                                 <TableColumn fx:id="colEndDate" text="Fin" prefWidth="100"/>
                                 <TableColumn fx:id="colTotalPrice" text="Prix Total" prefWidth="100"/>

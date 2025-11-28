@@ -1,11 +1,11 @@
 package com.cars_management.Controller.Contracts;
 
-import com.cars_management.Repository.ContractRepository;
+import com.cars_management.Controller.Cars.Car;
 import com.cars_management.Repository.IContractRepository;
+import com.cars_management.Repository.ContractRepository;
+import com.cars_management.Repository.CarRepository;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
@@ -28,20 +28,24 @@ public class ContractController {
     @FXML private TextField tfClientAddress;
     @FXML private DatePicker dpDriverLicenseDate;
 
-    @FXML private TextField tfCarBrand;
-    @FXML private TextField tfCarModel;
-    @FXML private TextField tfCarPlate;
+    // ComboBox voitures
+    @FXML private ComboBox<Car> cbCars;
 
+    // Dates & prix
     @FXML private DatePicker dpRentalStartDate;
     @FXML private DatePicker dpRentalEndDate;
     @FXML private TextField tfRentalDays;
     @FXML private TextField tfPricePerDay;
     @FXML private TextField tfTotalPrice;
 
+    // TABLE VIEW
     @FXML private TableView<Contract> contractTable;
     @FXML private TableColumn<Contract, Integer> colId;
     @FXML private TableColumn<Contract, String> colClientName;
-    @FXML private TableColumn<Contract, String> colCarPlate;
+
+    // NOUVELLE COLONNE "VOITURE"
+    @FXML private TableColumn<Contract, String> colCarInfo;
+
     @FXML private TableColumn<Contract, LocalDate> colStartDate;
     @FXML private TableColumn<Contract, LocalDate> colEndDate;
     @FXML private TableColumn<Contract, Double> colTotalPrice;
@@ -49,67 +53,100 @@ public class ContractController {
     @FXML
     public void initialize() {
 
-        // Utiliser la vraie implémentation
         contractRepository = new ContractRepository();
 
-        // Configuration des colonnes
+        // Init table columns
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colClientName.setCellValueFactory(new PropertyValueFactory<>("clientName"));
-        colCarPlate.setCellValueFactory(new PropertyValueFactory<>("carPlate"));
+
+        // CHANGER PLAQUE → VOITURE (marque + modèle)
+        colCarInfo.setCellValueFactory(cell ->
+                new javafx.beans.property.SimpleStringProperty(
+                        cell.getValue().getCarBrand() + " " + cell.getValue().getCarModel()
+                )
+        );
+
         colStartDate.setCellValueFactory(new PropertyValueFactory<>("rentalStartDate"));
         colEndDate.setCellValueFactory(new PropertyValueFactory<>("rentalEndDate"));
         colTotalPrice.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
 
         loadContracts();
 
-        // Calcul automatique prix total + jours
+        // Load cars in ComboBox
+        CarRepository carRepo = new CarRepository();
+        cbCars.setItems(FXCollections.observableArrayList(carRepo.findAll()));
+
+        cbCars.setCellFactory(list -> new ListCell<>() {
+            @Override
+            protected void updateItem(Car car, boolean empty) {
+                super.updateItem(car, empty);
+                setText(empty || car == null ? "" :
+                        car.getMarque() + " " + car.getModele() + " - " + car.getMatricule());
+            }
+        });
+
+        cbCars.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Car car, boolean empty) {
+                super.updateItem(car, empty);
+                setText(empty || car == null ? "" :
+                        car.getMarque() + " " + car.getModele() + " - " + car.getMatricule());
+            }
+        });
+
+        // Auto calculation
         dpRentalStartDate.setOnAction(e -> calculatePriceAndDays());
         dpRentalEndDate.setOnAction(e -> calculatePriceAndDays());
-        tfPricePerDay.textProperty().addListener((obs, o, n) -> calculatePriceAndDays());
+        tfPricePerDay.textProperty().addListener((obs, oldValue, newValue) -> calculatePriceAndDays());
     }
 
-    // Charger la liste
-    private void loadContracts() {
-        contractTable.setItems(FXCollections.observableArrayList(contractRepository.findAll()));
+    @FXML
+    private void onCarSelected() {
+        Car car = cbCars.getSelectionModel().getSelectedItem();
+        if (car != null) {
+            tfPricePerDay.setText(String.valueOf(car.getPrix()));
+            calculatePriceAndDays();
+        }
     }
 
-    // Calcul nombre de jours + total
     private void calculatePriceAndDays() {
         LocalDate start = dpRentalStartDate.getValue();
         LocalDate end = dpRentalEndDate.getValue();
 
-        if (start != null && end != null && end.isAfter(start)) {
+        if (start != null && end != null && !end.isBefore(start)) {
             long days = ChronoUnit.DAYS.between(start, end);
             tfRentalDays.setText(String.valueOf(days));
 
             try {
                 double price = Double.parseDouble(tfPricePerDay.getText());
                 tfTotalPrice.setText(String.valueOf(price * days));
-            } catch (Exception e) {
+            } catch (Exception ex) {
                 tfTotalPrice.setText("0");
             }
         }
     }
 
-    // ============= CRUD =============
+    private void loadContracts() {
+        contractTable.setItems(FXCollections.observableArrayList(contractRepository.findAll()));
+    }
 
     @FXML
     private void addContract() {
         try {
-            Contract c = buildContract(null);
-            contractRepository.save(c);
+            Contract contract = buildContract(null);
+            contractRepository.save(contract);
             loadContracts();
             clearForm();
-            showAlert("Succès", "Contrat ajouté");
+            showAlert("Succès", "Contrat ajouté !");
         } catch (Exception e) {
-            showAlert("Erreur", "Vérifiez vos valeurs");
+            showAlert("Erreur", "Veuillez vérifier les informations.");
         }
     }
 
     @FXML
     private void updateContract() {
         if (tfId.getText().isEmpty()) {
-            showAlert("Erreur", "Sélectionnez un contrat");
+            showAlert("Erreur", "Sélectionnez un contrat !");
             return;
         }
 
@@ -118,32 +155,34 @@ public class ContractController {
             contractRepository.update(c);
             loadContracts();
             clearForm();
-            showAlert("Succès", "Contrat modifié");
+            showAlert("Succès", "Contrat modifié !");
         } catch (Exception e) {
-            showAlert("Erreur", "Erreur de modification");
+            showAlert("Erreur", "Modification impossible !");
         }
     }
 
     @FXML
     private void deleteContract() {
         if (tfId.getText().isEmpty()) {
-            showAlert("Erreur", "Sélectionnez un contrat à supprimer");
+            showAlert("Erreur", "Sélectionnez un contrat !");
             return;
         }
 
         contractRepository.delete(Integer.parseInt(tfId.getText()));
         loadContracts();
         clearForm();
-        showAlert("Succès", "Contrat supprimé");
+        showAlert("Succès", "Contrat supprimé !");
     }
 
-    // Créer l’objet contrat
     private Contract buildContract(Integer id) {
-        LocalDate start = dpRentalStartDate.getValue();
-        LocalDate end = dpRentalEndDate.getValue();
-        long days = ChronoUnit.DAYS.between(start, end);
+
+        Car selectedCar = cbCars.getSelectionModel().getSelectedItem();
+        if (selectedCar == null)
+            throw new RuntimeException("Aucune voiture sélectionnée");
+
+        long days = Long.parseLong(tfRentalDays.getText());
         double price = Double.parseDouble(tfPricePerDay.getText());
-        double total = days * price;
+        double total = price * days;
 
         return new Contract(
                 id,
@@ -152,18 +191,17 @@ public class ContractController {
                 tfClientPhone.getText(),
                 tfClientAddress.getText(),
                 dpDriverLicenseDate.getValue(),
-                tfCarBrand.getText(),
-                tfCarModel.getText(),
-                tfCarPlate.getText(),
-                start,
-                end,
+                selectedCar.getMarque(),
+                selectedCar.getModele(),
+                selectedCar.getMatricule(),
+                dpRentalStartDate.getValue(),
+                dpRentalEndDate.getValue(),
                 (int) days,
                 price,
                 total
         );
     }
 
-    // Sélection d’une ligne dans le tableau
     @FXML
     private void onTableRowClick() {
         Contract c = contractTable.getSelectionModel().getSelectedItem();
@@ -174,9 +212,14 @@ public class ContractController {
             tfClientPhone.setText(c.getClientPhone());
             tfClientAddress.setText(c.getClientAddress());
             dpDriverLicenseDate.setValue(c.getDriverLicenseDate());
-            tfCarBrand.setText(c.getCarBrand());
-            tfCarModel.setText(c.getCarModel());
-            tfCarPlate.setText(c.getCarPlate());
+
+            // Re-select car in ComboBox
+            cbCars.getItems().forEach(car -> {
+                if (car.getMatricule().equals(c.getCarPlate())) {
+                    cbCars.getSelectionModel().select(car);
+                }
+            });
+
             dpRentalStartDate.setValue(c.getRentalStartDate());
             dpRentalEndDate.setValue(c.getRentalEndDate());
             tfRentalDays.setText(String.valueOf(c.getRentalDays()));
@@ -192,9 +235,9 @@ public class ContractController {
         tfClientPhone.clear();
         tfClientAddress.clear();
         dpDriverLicenseDate.setValue(null);
-        tfCarBrand.clear();
-        tfCarModel.clear();
-        tfCarPlate.clear();
+
+        cbCars.getSelectionModel().clearSelection();
+
         dpRentalStartDate.setValue(null);
         dpRentalEndDate.setValue(null);
         tfRentalDays.clear();
@@ -203,10 +246,11 @@ public class ContractController {
     }
 
     private void showAlert(String title, String msg) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(title);
-        a.setContentText(msg);
-        a.showAndWait();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
     }
 
     @FXML
