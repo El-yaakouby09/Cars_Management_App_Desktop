@@ -6,19 +6,10 @@ import com.cars_management.Repository.IReservationRepository;
 import com.cars_management.Repository.ReservationRepository;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -27,8 +18,8 @@ public class ReservationController {
     @FXML private TextField clientField;
     @FXML private ComboBox<Car> cbCars;
     @FXML private TextField priceField;
-    @FXML private DatePicker dpStart;
-    @FXML private DatePicker dpEnd;
+    @FXML private DatePicker startDateField;
+    @FXML private DatePicker endDateField;
     @FXML private TextField daysField;
 
     @FXML private TableView<Reservation> tableReservation;
@@ -37,206 +28,242 @@ public class ReservationController {
     @FXML private TableColumn<Reservation, Integer> colDays;
     @FXML private TableColumn<Reservation, Double> colTotal;
 
-    private final ObservableList<Reservation> reservations = FXCollections.observableArrayList();
+    private final CarRepository carRepo = new CarRepository();
+    private final IReservationRepository reservationRepo = new ReservationRepository();
 
-    private final IReservationRepository reservationRepository = new ReservationRepository();
-    private final ReservationService reservationService = new ReservationService();
+    private Reservation selected = null;
 
-    private Reservation selectedReservation = null;
+    // ------------------ INITIALISATION ------------------
 
     @FXML
     public void initialize() {
 
-        // Table columns
         colClient.setCellValueFactory(new PropertyValueFactory<>("client"));
         colCar.setCellValueFactory(new PropertyValueFactory<>("car"));
         colDays.setCellValueFactory(new PropertyValueFactory<>("days"));
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
-        // Charger les réservations existantes
-        reservations.addAll(reservationRepository.findAll());
-        tableReservation.setItems(reservations);
+        tableReservation.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSel, newSel) -> fillFields(newSel)
+        );
 
-        // Listener sélection table
-        tableReservation.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            selectedReservation = newVal;
-            if (newVal != null) {
-                fillFormFromReservation(newVal);
-            }
-        });
-
-        // Charger les voitures dans la ComboBox
-        CarRepository carRepo = new CarRepository();
         cbCars.setItems(FXCollections.observableArrayList(carRepo.findAll()));
 
-        cbCars.setCellFactory(list -> new ListCell<>() {
-            @Override
-            protected void updateItem(Car car, boolean empty) {
-                super.updateItem(car, empty);
-                setText(empty || car == null ? "" :
-                        car.getMarque() + " " + car.getModele() + " - " + car.getMatricule());
-            }
-        });
+        cbCars.setOnAction(e -> onCarSelected());
+        startDateField.setOnAction(e -> onDatesChanged());
+        endDateField.setOnAction(e -> onDatesChanged());
+        priceField.textProperty().addListener((a, b, c) -> onDatesChanged());
 
-        cbCars.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(Car car, boolean empty) {
-                super.updateItem(car, empty);
-                setText(empty || car == null ? "" :
-                        car.getMarque() + " " + car.getModele() + " - " + car.getMatricule());
-            }
-        });
-
-        // recalcul auto des jours / total quand les dates ou le prix changent
-        dpStart.setOnAction(e -> calculateDays());
-        dpEnd.setOnAction(e -> calculateDays());
-        priceField.textProperty().addListener((obs, o, n) -> calculateDays());
+        loadReservations();
     }
 
-    // Remplir le formulaire quand on clique sur une ligne
-    private void fillFormFromReservation(Reservation r) {
+    // ------------------ CHARGEMENT ------------------
+
+    private void loadReservations() {
+        tableReservation.setItems(FXCollections.observableArrayList(reservationRepo.findAll()));
+    }
+
+    // ------------------ AUTO REMPLISSAGE ------------------
+
+    private void fillFields(Reservation r) {
+        if (r == null) return;
+
+        selected = r;
+
         clientField.setText(r.getClient());
-        // on ne connaît que le nom de la voiture (String) => on ne re-sélectionne pas le Car
-        // tu peux améliorer plus tard si tu ajoutes une colonne "carId"
         daysField.setText(String.valueOf(r.getDays()));
-        priceField.setText(""); // impossible de le déduire à 100% (total / days)
-        dpStart.setValue(null);
-        dpEnd.setValue(null);
+        priceField.setText(String.valueOf(r.getPricePerDay()));
+        startDateField.setValue(r.getStartDate());
+        endDateField.setValue(r.getEndDate());
+
+        cbCars.getItems().stream()
+                .filter(c -> (c.getMarqueModel() + " - " + c.getMatricule()).equals(r.getCar()))
+                .findFirst()
+                .ifPresent(c -> cbCars.getSelectionModel().select(c));
     }
 
-    // ====== ComboBox voiture sélectionnée ======
+    // ------------------ CHOIX VOITURE ------------------
+
     @FXML
     private void onCarSelected() {
-        Car car = cbCars.getSelectionModel().getSelectedItem();
-        if (car != null && car.getPrix() != null) {
-            priceField.setText(String.valueOf(car.getPrix()));
-            calculateDays();
-        }
+        Car c = cbCars.getSelectionModel().getSelectedItem();
+        if (c == null) return;
+
+        priceField.setText(String.valueOf(c.getPrix()));
+        onDatesChanged();
     }
 
-    // ====== Calcul du nombre de jours (dpStart/dpEnd) ======
-    private void calculateDays() {
-        LocalDate start = dpStart.getValue();
-        LocalDate end = dpEnd.getValue();
+    // ------------------ CALCUL ------------------
 
-        if (start != null && end != null && !end.isBefore(start)) {
-            long days = ChronoUnit.DAYS.between(start, end);
-            daysField.setText(String.valueOf(days));
+    @FXML
+    private void onDatesChanged() {
+
+        LocalDate start = startDateField.getValue();
+        LocalDate end = endDateField.getValue();
+
+        if (start == null || end == null || end.isBefore(start)) {
+            daysField.setText("");
+            return;
         }
+
+        long days = ChronoUnit.DAYS.between(start, end);
+        daysField.setText(String.valueOf(days));
     }
 
-    // ====== AJOUTER ======
+    // ------------------ AJOUT ------------------
+
     @FXML
     private void addReservation() {
         try {
-            Car selectedCar = cbCars.getSelectionModel().getSelectedItem();
-            if (selectedCar == null) {
-                showAlert("Erreur", "Veuillez sélectionner une voiture.");
+            // Validation des champs
+            if (clientField.getText().isEmpty()) {
+                showError("Veuillez saisir le nom du client.");
+                return;
+            }
+            if (cbCars.getSelectionModel().getSelectedItem() == null) {
+                showError("Veuillez choisir une voiture.");
+                return;
+            }
+            if (startDateField.getValue() == null || endDateField.getValue() == null) {
+                showError("Veuillez choisir la date de début et la date de fin.");
+                return;
+            }
+            if (priceField.getText().isEmpty()) {
+                showError("Veuillez saisir / vérifier le prix par jour.");
+                return;
+            }
+            if (daysField.getText().isEmpty()) {
+                showError("Le nombre de jours est vide. Vérifiez les dates.");
                 return;
             }
 
-            int days = Integer.parseInt(daysField.getText());
-            double price = Double.parseDouble(priceField.getText());
-            double total = reservationService.calculerTotal(days, price);
+            // Construire l'objet
+            Reservation r = buildReservation(null);
 
-            Reservation r = new Reservation(
-                    clientField.getText(),
-                    selectedCar.getMarque() + " " + selectedCar.getModele(),
-                    days,
-                    total
-            );
-
-            if (reservationRepository.save(r)) {
-                reservations.add(r);
-                clearForm();
-            } else {
-                showAlert("Erreur", "Échec de l'enregistrement.");
+            // Sauvegarde en base
+            boolean ok = reservationRepo.save(r);
+            if (!ok) {
+                showError("La sauvegarde en base a échoué (voir console).");
+                return;
             }
 
+            // Recharger la table
+            loadReservations();
+            clearFields();
+            showInfo("Réservation ajoutée.");
+
         } catch (NumberFormatException e) {
-            showAlert("Erreur", "Vérifiez les valeurs (jours/prix).");
+            showError("Vérifiez le prix et le nombre de jours (valeurs numériques).");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Erreur inattendue lors de l'ajout.");
         }
     }
 
-    // ====== MODIFIER ======
+
+    // ------------------ MODIFIER ------------------
+
     @FXML
-    private void handleModifierReservation(ActionEvent event) {
-        if (selectedReservation == null) {
-            showAlert("Erreur", "Veuillez sélectionner une réservation dans le tableau.");
+    private void handleModifierReservation() {
+
+        if (selected == null) {
+            showError("Sélectionnez une réservation.");
             return;
         }
 
         try {
-            Car selectedCar = cbCars.getSelectionModel().getSelectedItem();
-            if (selectedCar == null) {
-                showAlert("Erreur", "Veuillez sélectionner une voiture.");
-                return;
-            }
+            Reservation r = buildReservation(selected.getId());
+            reservationRepo.update(selected.getId(), r);
 
-            int days = Integer.parseInt(daysField.getText());
-            double price = Double.parseDouble(priceField.getText());
-            double total = reservationService.calculerTotal(days, price);
+            loadReservations();
+            clearFields();
+            selected = null;
 
-            selectedReservation.setClient(clientField.getText());
-            selectedReservation.setCar(selectedCar.getMarque() + " " + selectedCar.getModele());
-            selectedReservation.setDays(days);
-            selectedReservation.setTotal(total);
+            showInfo("Réservation modifiée.");
 
-            if (selectedReservation.getId() != null) {
-                reservationRepository.update(selectedReservation.getId(), selectedReservation);
-            }
-
-            tableReservation.refresh();
-            clearForm();
-
-        } catch (NumberFormatException e) {
-            showAlert("Erreur", "Valeurs invalides pour jours/prix.");
+        } catch (Exception e) {
+            showError("Erreur lors de la modification.");
         }
     }
 
-    // ====== SUPPRIMER ======
+    // ------------------ SUPPRIMER ------------------
+
     @FXML
-    private void handleSupprimerReservation(ActionEvent event) {
-        if (selectedReservation == null) {
-            showAlert("Erreur", "Veuillez sélectionner une réservation.");
+    private void handleSupprimerReservation() {
+        if (selected == null) {
+            showError("Sélectionnez une réservation.");
             return;
         }
 
-        if (selectedReservation.getId() != null) {
-            reservationRepository.delete(selectedReservation.getId());
-        }
+        reservationRepo.delete(selected.getId());
+        loadReservations();
+        clearFields();
+        selected = null;
 
-        reservations.remove(selectedReservation);
-        clearForm();
+        showInfo("Réservation supprimée.");
     }
 
-    // ====== RETOUR ======
+    // ------------------ BUILD OBJET ------------------
+
+    private Reservation buildReservation(Integer id) {
+
+        Car c = cbCars.getSelectionModel().getSelectedItem();
+
+        int days = Integer.parseInt(daysField.getText());
+        double price = Double.parseDouble(priceField.getText());
+        double total = days * price;
+
+        return new Reservation(
+                id,
+                clientField.getText(),
+                (c == null ? "" : c.getMarqueModel() + " - " + c.getMatricule()),
+                days,
+                total,
+                startDateField.getValue(),
+                endDateField.getValue(),
+                price
+        );
+    }
+
+    // ------------------ RETOUR ------------------
+
     @FXML
-    public void handleRetoure(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/Fxml/dashBord.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setTitle("dashBord");
-        stage.show();
+    private void handleRetoure() {
+        try {
+            javafx.fxml.FXMLLoader loader =
+                    new javafx.fxml.FXMLLoader(getClass().getResource("/Fxml/dashBord.fxml"));
+
+            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load());
+            javafx.stage.Stage stage = (javafx.stage.Stage) clientField.getScene().getWindow();
+            stage.setScene(scene);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Erreur lors du retour.");
+        }
     }
 
-    // ====== Utils ======
-    private void clearForm() {
+    // ------------------ UTILS ------------------
+
+    private void clearFields() {
         clientField.clear();
         cbCars.getSelectionModel().clearSelection();
         priceField.clear();
-        dpStart.setValue(null);
-        dpEnd.setValue(null);
+        startDateField.setValue(null);
+        endDateField.setValue(null);
         daysField.clear();
-        tableReservation.getSelectionModel().clearSelection();
-        selectedReservation = null;
+        selected = null;
     }
 
-    private void showAlert(String title, String msg) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
+    private void showInfo(String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setContentText(msg);
+        a.show();
+    }
+
+    private void showError(String msg) {
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setContentText(msg);
+        a.show();
     }
 }

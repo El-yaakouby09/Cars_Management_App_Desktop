@@ -91,15 +91,11 @@ public class Car {
 
     @Override
     public String toString() {
-        return "Car{" +
-                "id=" + id +
-                ", matricule='" + matricule + '\'' +
-                ", marqueModel='" + marqueModel + '\'' +
-                ", status='" + status + '\'' +
-                ", prixDay=" + prixDay +
-                ", dateMaintenance=" + dateMaintenance +
-                '}';
+        // Ce qui sera affiché dans la ComboBox
+        return (marqueModel == null ? "" : marqueModel) +
+                (matricule == null ? "" : " - " + matricule);
     }
+
 
     @Override
     public boolean equals(Object o) {

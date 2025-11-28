@@ -1,42 +1,46 @@
 package com.cars_management.Controller.Reservations;
 
+import java.time.LocalDate;
+
 public class Reservation {
 
-    private Integer id;   // <-- ajouté
+    private Integer id;
     private String client;
     private String car;
     private int days;
     private double total;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private double pricePerDay;
 
-    // Constructeur utilisé pour créer une réservation depuis l'interface
-    public Reservation(String client, String car, int days, double total) {
+    public Reservation(String client, String car, int days, double total,
+                       LocalDate startDate, LocalDate endDate, double pricePerDay) {
+
         this.client = client;
         this.car = car;
         this.days = days;
         this.total = total;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.pricePerDay = pricePerDay;
     }
 
-    // Constructeur utilisé lorsque les données viennent de la BD
-    public Reservation(Integer id, String client, String car, int days, double total) {
+    public Reservation(Integer id, String client, String car, int days, double total,
+                       LocalDate startDate, LocalDate endDate, double pricePerDay) {
+
+        this(client, car, days, total, startDate, endDate, pricePerDay);
         this.id = id;
-        this.client = client;
-        this.car = car;
-        this.days = days;
-        this.total = total;
     }
 
-    // === GETTERS ===
+    // GETTERS - SETTERS
     public Integer getId() { return id; }
     public String getClient() { return client; }
     public String getCar() { return car; }
     public int getDays() { return days; }
     public double getTotal() { return total; }
+    public LocalDate getStartDate() { return startDate; }
+    public LocalDate getEndDate() { return endDate; }
+    public double getPricePerDay() { return pricePerDay; }
 
-    // === SETTERS ===
     public void setId(Integer id) { this.id = id; }
-    public void setClient(String client) { this.client = client; }
-    public void setCar(String car) { this.car = car; }
-    public void setDays(int days) { this.days = days; }
-    public void setTotal(double total) { this.total = total; }
-
 }

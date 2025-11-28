@@ -1,95 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="634.0" prefWidth="709.0"
-            stylesheets="@../Style/reservation.css"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane prefWidth="900" prefHeight="650"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.cars_management.Controller.Reservations.ReservationController">
 
     <children>
 
-        <VBox layoutX="2.0" layoutY="86.0" spacing="15">
+        <!-- TITRE -->
+        <Label text="Gestion des Réservations"
+               layoutX="250" layoutY="20"
+               style="-fx-font-size: 26px; -fx-font-weight: bold;" />
 
-            <HBox spacing="10">
+        <!-- FORMULAIRE -->
+        <VBox layoutX="20" layoutY="80" spacing="25">
 
-                <!-- COLONNE 1 -->
-                <VBox spacing="5" prefWidth="240">
+            <!-- Ligne 1 -->
+            <HBox spacing="40">
+
+                <!-- Client -->
+                <VBox spacing="5">
                     <Label text="Nom Client :" />
-                    <TextField fx:id="clientField" />
-
-                    <VBox>
-                        <Label text="Date début :" />
-                        <DatePicker fx:id="dpStart" />
-                    </VBox>
+                    <TextField fx:id="clientField" prefWidth="250" />
                 </VBox>
 
-                <!-- COLONNE 2 -->
-                <VBox spacing="5" prefWidth="240">
+                <!-- Voiture -->
+                <VBox spacing="5">
                     <Label text="Voiture :" />
-                    <ComboBox fx:id="cbCars" onAction="#onCarSelected"/>
-
-                    <VBox>
-                        <Label text="Date de fin :" />
-                        <DatePicker fx:id="dpEnd" />
-                    </VBox>
+                    <ComboBox fx:id="cbCars" prefWidth="250" onAction="#onCarSelected" />
                 </VBox>
 
-                <!-- COLONNE 3 -->
-                <VBox spacing="5" prefWidth="200">
+                <!-- Prix par jour -->
+                <VBox spacing="5">
                     <Label text="Prix par jour (DH) :" />
-                    <TextField fx:id="priceField" />
-
-                    <VBox>
-                        <Label text="Nombre de jours :" />
-                        <TextField fx:id="daysField" />
-                    </VBox>
+                    <TextField fx:id="priceField" prefWidth="200" />
                 </VBox>
 
             </HBox>
 
-            <!-- BUTTONS -->
-            <HBox spacing="15" styleClass="hboxButton">
+            <!-- Ligne 2 -->
+            <HBox spacing="40">
 
-                <Button onAction="#addReservation"
-                        prefHeight="35" prefWidth="95"
-                        style="-fx-background-color: #3498db; -fx-text-fill: white;"
-                        text="Ajouter" />
+                <!-- Date début -->
+                <VBox spacing="5">
+                    <Label text="Date début :" />
+                    <DatePicker fx:id="startDateField" prefWidth="250" onAction="#onDatesChanged"/>
+                </VBox>
 
-                <Button onAction="#handleModifierReservation"
-                        prefHeight="35" prefWidth="95"
-                        style="-fx-background-color: #3498db; -fx-text-fill: white;"
-                        text="Modifier" />
+                <!-- Date fin -->
+                <VBox spacing="5">
+                    <Label text="Date de fin :" />
+                    <DatePicker fx:id="endDateField" prefWidth="250" onAction="#onDatesChanged"/>
+                </VBox>
 
-                <Button onAction="#handleSupprimerReservation"
-                        prefHeight="35" prefWidth="95"
-                        style="-fx-background-color: #3498db; -fx-text-fill: white;"
-                        text="Supprimer" />
+                <!-- Nombre de jours -->
+                <VBox spacing="5">
+                    <Label text="Nombre de jours :" />
+                    <TextField fx:id="daysField" prefWidth="200" />
+                </VBox>
 
-                <Button onAction="#handleRetoure"
-                        prefHeight="35" prefWidth="88"
-                        style="-fx-background-color: #3498db; -fx-text-fill: white;"
-                        text="Retour" />
             </HBox>
 
-            <!-- TABLE -->
-            <TableView fx:id="tableReservation" prefHeight="295" prefWidth="663">
+            <!-- Boutons -->
+            <HBox spacing="20" style="-fx-padding: 10;">
+
+                <Button text="Ajouter"
+                        prefWidth="120"
+                        onAction="#addReservation"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+
+                <Button text="Modifier"
+                        prefWidth="120"
+                        onAction="#handleModifierReservation"
+                        style="-fx-background-color: #f1c40f; -fx-text-fill: white;" />
+
+                <Button text="Supprimer"
+                        prefWidth="120"
+                        onAction="#handleSupprimerReservation"
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
+
+                <Button text="Retour"
+                        prefWidth="120"
+                        onAction="#handleRetoure"
+                        style="-fx-background-color: #3498db; -fx-text-fill: white;" />
+
+            </HBox>
+
+            <!-- TABLE DES RÉSERVATIONS -->
+            <TableView fx:id="tableReservation" prefHeight="300">
+
                 <columns>
-                    <TableColumn fx:id="colClient" prefWidth="150" text="Client" />
-                    <TableColumn fx:id="colCar" prefWidth="150" text="Voiture" />
-                    <TableColumn fx:id="colDays" prefWidth="120" text="Jours" />
-                    <TableColumn fx:id="colTotal" prefWidth="120" text="Total (DH)" />
+                    <TableColumn fx:id="colClient" text="Client" prefWidth="200" />
+                    <TableColumn fx:id="colCar" text="Voiture" prefWidth="200" />
+                    <TableColumn fx:id="colDays" text="Jours" prefWidth="150" />
+                    <TableColumn fx:id="colTotal" text="Total (DH)" prefWidth="150" />
                 </columns>
+
             </TableView>
 
-        </VBox>
 
-        <Label layoutX="84" layoutY="24"
-               style="-fx-font-size: 24px; -fx-font-weight: bold;"
-               text="Gestion des Réservations" />
+        </VBox>
 
     </children>
 
