@@ -9,14 +9,12 @@ public class ReservationService {
 
     private final IReservationRepository repo;
 
-    private static final double PRIX_JOUR = 200.0;
-
     public ReservationService() {
         this.repo = new ReservationRepository();
     }
 
-    public double calculerTotal(int jours) {
-        return jours * PRIX_JOUR;
+    public double calculerTotal(int jours, double prixParJour) {
+        return jours * prixParJour;
     }
 
     public boolean save(Reservation r) {
