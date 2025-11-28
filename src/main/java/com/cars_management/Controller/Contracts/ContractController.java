@@ -1,7 +1,7 @@
 package com.cars_management.Controller.Contracts;
 
-import com.cars_management.Repository.IContractRepository;
 import com.cars_management.Repository.ContractRepository;
+import com.cars_management.Repository.IContractRepository;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 public class ContractController {
 
@@ -50,28 +49,10 @@ public class ContractController {
     @FXML
     public void initialize() {
 
-        contractRepository = new IContractRepository() {
-            @Override
-            public void save(Contract contract) {
+        // Utiliser la vraie implémentation
+        contractRepository = new ContractRepository();
 
-            }
-
-            @Override
-            public void update(Contract contract) {
-
-            }
-
-            @Override
-            public void delete(Integer id) {
-
-            }
-
-            @Override
-            public List<Contract> findAll() {
-                return List.of();
-            }
-        };  // ← utilise interface
-
+        // Configuration des colonnes
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colClientName.setCellValueFactory(new PropertyValueFactory<>("clientName"));
         colCarPlate.setCellValueFactory(new PropertyValueFactory<>("carPlate"));
@@ -81,17 +62,18 @@ public class ContractController {
 
         loadContracts();
 
+        // Calcul automatique prix total + jours
         dpRentalStartDate.setOnAction(e -> calculatePriceAndDays());
         dpRentalEndDate.setOnAction(e -> calculatePriceAndDays());
         tfPricePerDay.textProperty().addListener((obs, o, n) -> calculatePriceAndDays());
     }
 
+    // Charger la liste
     private void loadContracts() {
-        ObservableList<Contract> list =
-                FXCollections.observableArrayList(contractRepository.findAll());
-        contractTable.setItems(list);
+        contractTable.setItems(FXCollections.observableArrayList(contractRepository.findAll()));
     }
 
+    // Calcul nombre de jours + total
     private void calculatePriceAndDays() {
         LocalDate start = dpRentalStartDate.getValue();
         LocalDate end = dpRentalEndDate.getValue();
@@ -109,6 +91,8 @@ public class ContractController {
         }
     }
 
+    // ============= CRUD =============
+
     @FXML
     private void addContract() {
         try {
@@ -124,18 +108,19 @@ public class ContractController {
 
     @FXML
     private void updateContract() {
+        if (tfId.getText().isEmpty()) {
+            showAlert("Erreur", "Sélectionnez un contrat");
+            return;
+        }
+
         try {
-            if (tfId.getText().isEmpty()) {
-                showAlert("Erreur", "Sélectionnez un contrat");
-                return;
-            }
             Contract c = buildContract(Integer.parseInt(tfId.getText()));
             contractRepository.update(c);
             loadContracts();
             clearForm();
             showAlert("Succès", "Contrat modifié");
         } catch (Exception e) {
-            showAlert("Erreur", "Vérifiez vos valeurs");
+            showAlert("Erreur", "Erreur de modification");
         }
     }
 
@@ -145,12 +130,14 @@ public class ContractController {
             showAlert("Erreur", "Sélectionnez un contrat à supprimer");
             return;
         }
+
         contractRepository.delete(Integer.parseInt(tfId.getText()));
         loadContracts();
         clearForm();
         showAlert("Succès", "Contrat supprimé");
     }
 
+    // Créer l’objet contrat
     private Contract buildContract(Integer id) {
         LocalDate start = dpRentalStartDate.getValue();
         LocalDate end = dpRentalEndDate.getValue();
@@ -170,12 +157,13 @@ public class ContractController {
                 tfCarPlate.getText(),
                 start,
                 end,
-                (int)days,
+                (int) days,
                 price,
                 total
         );
     }
 
+    // Sélection d’une ligne dans le tableau
     @FXML
     private void onTableRowClick() {
         Contract c = contractTable.getSelectionModel().getSelectedItem();
