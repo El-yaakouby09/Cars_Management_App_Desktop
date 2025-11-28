@@ -50,19 +50,35 @@
                </children>
             </VBox>
             </HBox>
-         <HBox prefHeight="65.0" prefWidth="240.0" style="-fx-background-color: #00000;" styleClass="hboxButton" stylesheets="@../Style/reservation.css">
-            <children>
-               <Button onAction="#addReservation" prefHeight="35.0" prefWidth="95.0" style="-fx-background-color: #3498db; -fx-text-fill: white;" stylesheets="@../Style/reservation.css" text="Ajouter" />
-               <Button mnemonicParsing="false" style="-fx-background-color: #3498db; -fx-text-fill: #ffffff;" stylesheets="@../Style/reservation.css" text="Modifier" />
-               <Button mnemonicParsing="false" style="-fx-background-color: #3498db; -fx-text-fill: #ffffff;" stylesheets="@../Style/reservation.css" text="Supprimer" />
-               <Button onAction="#handleRetoure" prefHeight="35.0" prefWidth="88.0" style="-fx-background-color: #3498db; -fx-text-fill: #ffffff;" stylesheets="@../Style/reservation.css" text="Retour">
-                  <styleClass>
-                     <String fx:value="button" />
-                     <String fx:value="buttonRetour" />
-                  </styleClass>
-               </Button>
-            </children>
-         </HBox>
+            <HBox prefHeight="65.0" prefWidth="240.0" styleClass="hboxButton">
+
+                <children>
+
+                    <Button onAction="#addReservation"
+                            prefHeight="35.0" prefWidth="95.0"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white;"
+                            text="Ajouter" />
+
+                    <Button onAction="#handleModifierReservation"
+                            prefHeight="35.0" prefWidth="95.0"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white;"
+                            text="Modifier" />
+
+                    <Button onAction="#handleSupprimerReservation"
+                            prefHeight="35.0" prefWidth="95.0"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white;"
+                            text="Supprimer" />
+
+                    <Button onAction="#handleRetoure"
+                            prefHeight="35.0" prefWidth="88.0"
+                            style="-fx-background-color: #3498db; -fx-text-fill: #ffffff;"
+                            text="Retour">
+                    </Button>
+
+                </children>
+
+            </HBox>
+
 
             <TableView fx:id="tableReservation" prefHeight="295.0" prefWidth="663.0">
 

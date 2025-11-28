@@ -6,7 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservationRepository {
+public class ReservationRepository implements IReservationRepository {
+
     private final String url;
     private final String user;
     private final String password;
@@ -37,10 +38,11 @@ public class ReservationRepository {
         try (Connection c = getConnection(); Statement s = c.createStatement()) {
             s.execute(sql);
         } catch (SQLException e) {
-            System.err.println("Failed to initialize reservations table: " + e.getMessage());
+            System.err.println("Failed to initialize table: " + e.getMessage());
         }
     }
 
+    @Override
     public boolean save(Reservation r) {
         String sql = "INSERT INTO reservations (client, car, days, total) VALUES (?, ?, ?, ?)";
         try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
@@ -56,20 +58,57 @@ public class ReservationRepository {
         }
     }
 
+    @Override
     public List<Reservation> findAll() {
         List<Reservation> list = new ArrayList<>();
-        String sql = "SELECT client, car, days, total FROM reservations";
-        try (Connection c = getConnection(); Statement s = c.createStatement(); ResultSet rs = s.executeQuery(sql)) {
+        String sql = "SELECT id, client, car, days, total FROM reservations";
+
+        try (Connection c = getConnection();
+             Statement s = c.createStatement();
+             ResultSet rs = s.executeQuery(sql)) {
+
             while (rs.next()) {
-                String client = rs.getString("client");
-                String car = rs.getString("car");
-                int days = rs.getInt("days");
-                double total = rs.getDouble("total");
-                list.add(new Reservation(client, car, days, total));
+                Reservation r = new Reservation(
+                        rs.getString("client"),
+                        rs.getString("car"),
+                        rs.getInt("days"),
+                        rs.getDouble("total")
+                );
+                r.setId(rs.getInt("id")); // IMPORTANT : stocker l'ID
+                list.add(r);
             }
+
         } catch (SQLException e) {
             System.err.println("Reservation findAll failed: " + e.getMessage());
         }
         return list;
+    }
+
+    @Override
+    public boolean update(int id, Reservation r) {
+        String sql = "UPDATE reservations SET client=?, car=?, days=?, total=? WHERE id=?";
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, r.getClient());
+            ps.setString(2, r.getCar());
+            ps.setInt(3, r.getDays());
+            ps.setDouble(4, r.getTotal());
+            ps.setInt(5, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Reservation update failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete(int id) {
+        String sql = "DELETE FROM reservations WHERE id=?";
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Reservation delete failed: " + e.getMessage());
+            return false;
+        }
     }
 }
