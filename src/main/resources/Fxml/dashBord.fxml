@@ -45,7 +45,7 @@
 
             <!-- Voitures -->
             <VBox alignment="CENTER" prefHeight="120.0" prefWidth="189.0" spacing="5" styleClass="stat-card" stylesheets="@../Style/dashBord.css">
-                <Text styleClass="stat-number" text="58" />
+                <Text fx:id="txtCars" styleClass="stat-number" text="0" />
                 <Text styleClass="stat-label" text="Voitures" />
             </VBox>
 
@@ -53,13 +53,13 @@
 
          <!-- Clients -->
          <VBox alignment="CENTER" layoutX="457.0" layoutY="90.0" prefHeight="120" prefWidth="219.0" spacing="5" styleClass="stat-card" stylesheets="@../Style/dashBord.css">
-             <Text styleClass="stat-number" text="125" />
+             <Text fx:id="txtClients" styleClass="stat-number" text="0" />
              <Text styleClass="stat-label" text="Clients" />
          </VBox>
 
          <!-- Chiffre d'affaires -->
          <VBox alignment="CENTER" layoutX="221.0" layoutY="246.0" prefHeight="106.0" prefWidth="287.0" spacing="5" styleClass="stat-card" stylesheets="@../Style/dashBord.css">
-             <Text styleClass="stat-number" text="320.000 MAD" />
+             <Text fx:id="txtRevenus" styleClass="stat-number" text="0 MAD" />
              <Text styleClass="stat-label" text="Revenus" />
          </VBox>
 

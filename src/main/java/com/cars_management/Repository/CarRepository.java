@@ -122,6 +122,19 @@ public class CarRepository implements ICarRepository {
 
         return list;
     }
+    public int countCars() {
+        String sql = "SELECT COUNT(*) FROM cars";
+        try (Connection c = getConnection();
+             Statement st = c.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            if (rs.next()) return rs.getInt(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
 
 

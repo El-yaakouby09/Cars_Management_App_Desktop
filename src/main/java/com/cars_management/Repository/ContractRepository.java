@@ -180,4 +180,31 @@ public class ContractRepository implements IContractRepository {
 
         return list;
     }
+    public int countContracts() {
+        String sql = "SELECT COUNT(*) FROM contracts";
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Count Contracts Error: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public double sumRevenues() {
+        String sql = "SELECT SUM(total_price) FROM contracts";
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Sum Revenues Error: " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+
 }
