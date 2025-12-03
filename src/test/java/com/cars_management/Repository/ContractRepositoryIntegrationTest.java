@@ -84,4 +84,35 @@ public class ContractRepositoryIntegrationTest {
 
         Assertions.assertEquals(before - 1, after);
     }
+    @Test
+    @Order(5)
+    void testCountContracts() {
+        // On insère 2 nouveaux contrats pour vérifier le compteur
+        Contract c1 = buildSampleContract();
+        Contract c2 = buildSampleContract();
+
+        repo.save(c1);
+        repo.save(c2);
+
+        int count = repo.countContracts();
+
+        Assertions.assertTrue(count >= 2, "Le compteur doit retourner au moins 2 contrats");
+    }
+
+    @Test
+    @Order(6)
+    void testSumRevenues() {
+        // Avant insertion
+        double before = repo.sumRevenues();
+
+        // On ajoute un contrat de prix total 1200.0
+        Contract c = buildSampleContract();
+        repo.save(c);
+
+        double after = repo.sumRevenues();
+
+        Assertions.assertEquals(before + 1200.0, after, 0.001,
+                "La somme des revenus doit augmenter de 1200.0");
+    }
+
 }
