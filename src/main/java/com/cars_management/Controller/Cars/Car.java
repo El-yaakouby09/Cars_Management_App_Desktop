@@ -7,11 +7,11 @@ import java.util.Objects;
 public class Car {
 
     private Integer id;
-    private String matricule;       
-    private String marqueModel;      
+    private String matricule;
+    private String marqueModel;
     private Integer annee;
-    private String status;           
-    private BigDecimal prixDay;     
+    private String status;
+    private BigDecimal prixDay;
     private LocalDate dateMaintenance;
 
     public Car() {}
