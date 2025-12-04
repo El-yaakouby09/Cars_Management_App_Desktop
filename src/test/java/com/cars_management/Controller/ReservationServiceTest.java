@@ -1,5 +1,6 @@
-package com.cars_management.Controller.Reservations;
+package com.cars_management.Controller;
 
+import com.cars_management.Controller.Reservations.ReservationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

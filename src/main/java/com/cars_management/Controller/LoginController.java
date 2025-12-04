@@ -1,5 +1,6 @@
 package com.cars_management.Controller;
 
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,13 +13,12 @@ import javafx.scene.control.PasswordField;    // ✔ CORRECT
 import javafx.stage.Stage;
 
 
-import java.awt.*;
 import java.io.IOException;
 import com.cars_management.Repository.UserRepository;
 import com.cars_management.Setting.Session;
 import com.cars_management.Controller.Auth.User;
 
-public class LoginController {
+public class LoginController extends Application {
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -40,7 +40,7 @@ public class LoginController {
             UserRepository userRepo = new UserRepository();
             User u = userRepo.findByUsername(username);
             if (u == null || !password.equals(u.getPassword())) {
-                showError("Nom d'utilisateur ou mot de passe incorrect.");
+                showError("Nom d'utilisateur ou mot de passe invalide");
                 return;
             }
 
@@ -62,4 +62,12 @@ public class LoginController {
         alert.close();
     }
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/login.fxml"));
+        Parent root = loader.load();
+        primaryStage.setTitle("Login Page");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+    }
 }
